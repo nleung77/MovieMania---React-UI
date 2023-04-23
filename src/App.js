@@ -4,38 +4,47 @@ import MovieCard from "./MovieCard";
 import SearchIcon from "./search.svg";
 import "./App.css";
 
-const API_URL = "http://www.omdbapi.com/?i=tt3896198&apikey=e1879397";
+const API_URL = "http://www.omdbapi.com/?apikey=e1879397";
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [movies, setMovies] = useState([]);
 
-  useEffect(() => {
-    searchMovies("Avengers");
-  }, []);
-
-  const searchMovies = async (title) => {
+  const searchMovies = async () => {
+    let title;
+    if (searchTerm === "") {
+      title = "Avengers";
+    } else {
+      title = searchTerm;
+    }
     const response = await fetch(`${API_URL}&s=${title}`);
     const data = await response.json();
-
+    console.log(data.Search);
     setMovies(data.Search);
+  };
+
+  useEffect(() => {
+    searchMovies();
+  }, []);
+
+  let search = (e) => {
+    e.preventDefault();
+    searchMovies();
   };
 
   return (
     <div className="app">
       <h1>MovieMania</h1>
-
       <div className="search">
-        <input
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          placeholder="Search for movies"
-        />
-        <img
-          src={SearchIcon}
-          alt="search"
-          onClick={() => searchMovies(searchTerm)}
-        />
+        <form onSubmit={search}>
+          <input
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search for movies"
+            type="text"
+          />
+        </form>
+        <img src={SearchIcon} alt="search" onClick={search} type="search" />
       </div>
 
       {movies?.length > 0 ? (
