@@ -1,2 +1,2 @@
-# Rick & Morty Matching Game
+# MovieMania - React UI Project
 
